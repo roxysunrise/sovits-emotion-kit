@@ -1,4 +1,4 @@
-﻿"""情感分析器 —— 文本 → EmotionPoint（含逐句情感弧）。
+"""情感分析器 —— 文本 → EmotionPoint（含逐句情感弧）。
 
 为什么不用「离散标签分类」：
     QQ 里一句话的情绪是连续变化的。小洛说「今天好累啊…不过看到你就好啦」，
@@ -331,6 +331,17 @@ def analyze(
     blended.arc = whole.arc
     blended.source = "rule+state"
 
+    if hint_labels and hint_pt is None:
+        # 内联标记（【撒娇】/（小声））也是**明确指令**：标签必须听它的。
+        # 之前只把它当 arc 里的一点，最后被 reconcile 拉回「开心」这类主导标签，
+        # 于是【撒娇】换到了开心的 ref —— 现在直接以最后一个标记为准。
+        _lbl = hint_labels[-1]
+        _pv, _pa, _pd = L.LABEL_PRIORS[_lbl]
+        _hp = EmotionPoint(_pv, _pa, _pd, 0.8, _lbl, 0.9, source="inline").normalized()
+        blended = blended.lerp(_hp, 0.60)
+        blended.label = _lbl
+        blended.arc = whole.arc
+        blended.source = "rule+inline"
     if hint_pt is not None:
         # 标签以 hint 为准（它是上游的明确意图），强度/弧线仍让文本说话。
         # 这样「高唤醒的难过」「低唤醒的开心」都能表达出来，而不是被拉回平均。

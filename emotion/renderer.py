@@ -1,4 +1,4 @@
-"""renderer —— 把一句话编成「有情绪的 WAV」。
+﻿"""renderer —— 把一句话编成「有情绪的 WAV」。
 
 链路（严格按五段流水线的 ②③④，只是把生成层留给调用方注入）：
 
@@ -92,7 +92,10 @@ def render(
     clean, cleaned = L.clean_for_speech(clean, keep_emoji=use_emoji)
     clauses = A.split_clauses(clean) or [clean or "嗯"]
     if emotion is None:
-        emotion = A.analyze(clean, prior=prior, hint_label=hint_label,
+        # 注意：这里要喂**原始文本**，不是已清洗的 clean。
+        # 因为「【难过】」「（小声）」这类内联表演指令是给分析器看的，
+        # 一旦先剥掉，情绪就判不出来了 —— 之前就是这么丢的。
+        emotion = A.analyze(text or "", prior=prior, hint_label=hint_label,
                             use_llm=llm_conf, use_emoji=use_emoji)
     plan = PL.build_plan(clauses, emotion, p, lang=lang, base_f0=base_f0)
 

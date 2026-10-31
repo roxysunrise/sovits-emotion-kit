@@ -93,3 +93,22 @@ def emotion_for(text: str, cfg: dict) -> dict:
         "_emotion": label,
         "_intensity": round(intensity, 3),
     }
+
+def clean_for_tts(text: str, cfg: dict) -> str:
+    """把「【难过】」「（小声）」「😭」这类给分析器看的标记从**要念的文本**里剥掉。
+
+    情绪由 emotion_for() 判，念出来的文本不该带指令 —— 否则 TTS 会把"难过"两个字念出来。
+    """
+    if not cfg or not cfg.get("enabled"):
+        return text
+    voice_dir = cfg.get("voice_dir") or r"D:\Deepsleep\PJ\voice"
+    if not _load(voice_dir):
+        return text
+    try:
+        an = _READY["an"]
+        clean, _hints = an.extract_hints(text or "")
+        from emotion import lexicon as _lex  # noqa: WPS433
+        clean, _ = _lex.clean_for_speech(clean, keep_emoji=False)
+        return clean or text
+    except Exception:  # noqa: BLE001
+        return text
