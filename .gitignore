@@ -1,0 +1,26 @@
+﻿# 情绪 ref（音色素材，别进仓库）
+refs/emotional/*.wav
+refs/emotional/*.json
+refs/**/*.wav
+!refs/.gitkeep
+
+# 自己的配置（含本地路径与 token）
+config.json
+*.local.json
+
+# 生成的试听与临时产物
+doctor_ab/
+out.wav
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 模型与权重
+*.pth
+*.ckpt
+*.index
+*.onnx

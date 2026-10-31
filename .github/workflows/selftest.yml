@@ -1,0 +1,27 @@
+name: selftest
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  selftest:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.9", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: 离线自检（39 项，不需要模型）
+        run: python -m emotion.selftest
+      - name: 包导入与命令行冒烟
+        run: |
+          python -c "import emotion; from emotion import refs, analyzer, planner, renderer, dsp, metrics; print('imports ok')"
+          python tools/derive_refs.py --help
+          python tools/doctor.py --help

@@ -1,0 +1,22 @@
+{
+  "_说明": "复制成 config.json 再改。只有 base_ref / prompt_text / gsv_url 是必填的。",
+
+  "gsv_url": "http://127.0.0.1:9880",
+  "gsv_timeout": 180,
+
+  "base_ref": "D:/path/to/your-reference.wav",
+  "prompt_text": "这段参考音频的逐字转写，必须完全一致",
+  "prompt_lang": "all_zh",
+
+  "refs_dir": "refs/emotional",
+  "persona_file": "personas/roxy.json",
+
+  "lang": "auto",
+  "text_lang": "auto",
+  "seed": 42,
+
+  "clean_refs": false,
+  "per_segment_ref": false,
+  "tail_trim_db": -45.0,
+  "max_seconds": 58
+}
