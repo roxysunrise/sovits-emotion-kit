@@ -1,5 +1,5 @@
 {
-  "_说明": "复制成 config.json 再改。只有 base_ref / prompt_text / gsv_url 是必填的。",
+  "_说明": "复制成 config.json 再改。只有 gsv_url / base_ref / prompt_text 是必填的。",
 
   "gsv_url": "http://127.0.0.1:9880",
   "gsv_timeout": 180,
@@ -9,7 +9,7 @@
   "prompt_lang": "all_zh",
 
   "refs_dir": "refs/emotional",
-  "persona_file": "personas/roxy.json",
+  "persona_file": "",
 
   "lang": "auto",
   "text_lang": "auto",
