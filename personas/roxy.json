@@ -1,0 +1,24 @@
+{
+  "id": "roxy",
+  "name": "洛奇希",
+  "description": "日语气质偏甜、语速中偏快、句尾微翘。这是个模板，换成你的角色只改这个文件。",
+  "langs": ["ja", "zh", "en"],
+  "baseline": {
+    "semitones": 0.0,
+    "rate_pct": 0.0,
+    "breath": 0.05,
+    "vibrato_hz": 5.0,
+    "vibrato_st": 0.04,
+    "tail_rise": 0.15,
+    "energy_db": 0.0
+  },
+  "emotion_bias": {
+    "开心": { "semitones": 0.25, "rate_pct": 4.0, "tail_rise": 0.25 },
+    "撒娇": { "semitones": 0.35, "rate_pct": -2.0, "breath": 0.12, "tail_rise": 0.45 },
+    "温柔": { "semitones": -0.10, "rate_pct": -5.0, "breath": 0.10 },
+    "难过": { "semitones": -0.20, "rate_pct": -8.0, "breath": 0.08, "energy_db": -1.0 },
+    "生气": { "semitones": 0.10, "rate_pct": 6.0, "energy_db": 1.2 },
+    "疲惫": { "semitones": -0.25, "rate_pct": -8.0, "energy_db": -1.2 }
+  },
+  "tics": []
+}

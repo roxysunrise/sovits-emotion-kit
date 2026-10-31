@@ -129,7 +129,7 @@ curl -X POST http://127.0.0.1:9883/tts ^
 |---|---|
 | 情绪的强弱 | `emotion/refs.py` → `DERIVE`（semitones / gain_db） |
 | 采样风格（活一点/稳一点） | `emotion/refs.py` → `SAMPLING`（temperature / rep / fragment_interval） |
-| 声线底色（可选，默认中性） | `config.json` → `persona_file` 指向你自己的 JSON：`{"baseline":{"semitones":0.3,"rate_pct":4,"breath":0.1}}` |
+| 角色的语气底色 | `personas/*.json` → `baseline` / `emotion_bias` |
 | 长句里转折要不要换音色 | `config.json` → `per_segment_ref`（true=按小句换 ref，转折明显但音色会跳） |
 | 音质最优先 | `config.json` → `clean_refs: true`（完全不动 ref，只调参数） |
 | 句尾混响感 | `config.json` → `tail_trim_db`（默认 -45，越小剪越狠） |
@@ -173,12 +173,9 @@ server/emotion_server.py   独立 HTTP 服务（/tts /analyze /health /refs）
 tools/derive_refs.py       生成 10 个情绪 ref
 tools/doctor.py            自检 + 端到端 A/B
 bridge/                    接进已有网关的补丁与改动记录
+personas/                  角色语气模板（JSON）
 refs/                      情绪 ref 与 index.json（.gitignore 里忽略音频）
 ```
-
-**本包只包含声音处理加工本身**：文本情绪分析、韵律规划、参考音频选择、PCM 变换、拼接与去尾巴。
-不带任何角色预设、不带音色素材、不带模型。角色/声线想固定的话，用一个自己写的 JSON 覆盖
-`persona_file`（键见 `emotion/persona.py`），默认是中性无偏置。
 
 `python -m emotion.selftest` 可以跑 39 项离线自检（毫秒级，不需要模型）。
 
