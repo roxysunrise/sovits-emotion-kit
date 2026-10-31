@@ -1,4 +1,4 @@
-﻿"""doctor —— 装完先跑这个：把「能不能出带情感的声音」逐项检查一遍。
+"""doctor —— 装完先跑这个：把「能不能出带情感的声音」逐项检查一遍。
 
     python tools/doctor.py --config config.json
 
@@ -39,6 +39,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", default=os.path.join(ROOT, "config.json"))
     ap.add_argument("--skip-tts", action="store_true", help="不做联网合成测试")
+    ap.add_argument("--ab-out", default="", help="把 A/B 两段音频写到这个目录（默认不写）")
     args = ap.parse_args()
 
     print("=" * 64)
@@ -111,11 +112,16 @@ def main() -> int:
                     fs["rate_syl"] < fc["rate_syl"] or fs["rms_db"] < fc["rms_db"] - 0.5,
                     f"语速 {fs['rate_syl']:.2f} vs {fc['rate_syl']:.2f}，"
                     f"能量 {fs['rms_db']:.1f} vs {fc['rms_db']:.1f}dB")
-                out = os.path.join(ROOT, "doctor_ab")
-                os.makedirs(out, exist_ok=True)
-                open(os.path.join(out, "sad.wav"), "wb").write(wav_sad)
-                open(os.path.join(out, "calm.wav"), "wb").write(wav_calm)
-                print(f"       试听：{out}\\sad.wav / calm.wav  ref={meta_sad.get('ref')}")
+                # 默认**不落盘**：只给指标，不生成演示音频。
+                # 想留证据就自己加 --ab-out 目录。
+                if args.ab_out:
+                    out = os.path.abspath(args.ab_out)
+                    os.makedirs(out, exist_ok=True)
+                    open(os.path.join(out, "sad.wav"), "wb").write(wav_sad)
+                    open(os.path.join(out, "calm.wav"), "wb").write(wav_calm)
+                    print(f"       已写 {out}\\sad.wav / calm.wav  ref={meta_sad.get('ref')}")
+                else:
+                    print(f"       ref={meta_sad.get('ref')}（默认不写音频，需要就加 --ab-out DIR）")
             except Exception as e:  # noqa: BLE001
                 chk("端到端合成", False, f"{type(e).__name__}: {e}")
 

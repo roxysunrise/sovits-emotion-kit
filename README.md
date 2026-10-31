@@ -1,4 +1,4 @@
-# GPT-SoVITS 情感层（sovits-emotion-kit）
+﻿# GPT-SoVITS 情感层（sovits-emotion-kit）
 
 > **你只需要一个能跑的 GPT-SoVITS。** 不用训练、不用微调、不用换模型。
 > 给它一段你自己的干净参考音频（3~8 秒），它就能按情绪换参考音频（ref）来念，
@@ -74,7 +74,7 @@ python tools/doctor.py --config config.json
 ```
 
 它会检查：ref 是否齐全、音高有没有梯度、SoVITS 是否在线，然后真的合成"平静 vs 难过"两段，
-比较客观指标（F0 / 语速 / 能量），把试听丢到 `doctor_ab/`。
+比较客观指标（F0 / 语速 / 能量）。**默认不写任何音频文件**；想留证据加 `--ab-out DIR`。
 
 ### 2.3 起服务
 

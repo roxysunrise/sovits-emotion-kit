@@ -1,4 +1,4 @@
-﻿"""selftest —— 不联网也能验证「情感真的做出来了」。
+"""selftest —— 不联网也能验证「情感真的做出来了」。
 
 验证四件事：
   1. WAV 读写与限幅没问题
@@ -236,7 +236,11 @@ def test_emoji_off() -> None:
 
 
 def test_gsv_refs() -> None:
-    """SoVITS 侧的情感：ref 库 + 参数映射 + hint 优先级（不需要 9880 在跑）。"""
+    """SoVITS 侧的情感：ref 库 + 参数映射 + hint 优先级（不需要 9880 在跑）。
+
+    ref 库是用户自己派生的，仓库里不带音色素材 —— 没有 ref 时这部分标记为 SKIP，
+    不算失败（新克隆下来第一次跑就是这种情况）。
+    """
     from . import refs
 
     hint_pt = A.analyze("今日は嬉しいことがあったの。", hint_label="难过")
@@ -244,6 +248,11 @@ def test_gsv_refs() -> None:
           f"{hint_pt.label} / src={hint_pt.source}")
     hint_pt2 = A.analyze("今日は嬉しいことがあったの。", hint_label="生气")
     check("hint 换一个标签也跟着换", hint_pt2.label == "生气", hint_pt2.label)
+
+    base = os.path.join(refs.DEFAULT_DIR, "平静.wav")
+    if not os.path.exists(base):
+        print("[SKIP] ref 库为空（先跑 tools/derive_refs.py），跳过 ref 相关检查")
+        return
 
     ov_sad = refs.pick("难过", 0.6, out_dir=refs.DEFAULT_DIR)
     ov_happy = refs.pick("开心", 0.6, out_dir=refs.DEFAULT_DIR)
